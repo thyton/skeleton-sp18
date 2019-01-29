@@ -2,7 +2,7 @@
  *  @author YOUR NAME HERE
  */
 public class LeapYear {
-    private static boolean isLeapYear (int year)
+    public static boolean isLeapYear (int year)
     {
         if(year%4 != 0)
             return false;
