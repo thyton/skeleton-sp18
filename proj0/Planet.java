@@ -49,4 +49,41 @@ public class Planet {
         double r = Math.sqrt(Math.pow(p.xxPos - xxPos, 2) + Math.pow(p.yyPos - yyPos, 2));
         return (p.yyPos-yyPos)*G*mass*p.mass/Math.pow(r,3);
     }
+
+    public double calcNetForceExertedByX(Planet [] ps)
+    {
+        double net = 0;
+        for(Planet p : ps)
+        {
+            if(!this.equals(p))
+            {
+                double r = Math.sqrt(Math.pow(p.xxPos - xxPos, 2) + Math.pow(p.yyPos - yyPos, 2));
+                net += (p.xxPos-xxPos)*G*mass*p.mass/Math.pow(r,3);
+            }
+        }
+        return net;
+    }
+
+    public double calcNetForceExertedByY(Planet [] ps)
+    {
+        double net = 0;
+        for(Planet p : ps)
+        {
+            if(!this.equals(p))
+            {
+                double r = Math.sqrt(Math.pow(p.xxPos - xxPos, 2) + Math.pow(p.yyPos - yyPos, 2));
+                net += (p.yyPos-yyPos)*G*mass*p.mass/Math.pow(r,3);
+            }
+        }
+        return net;
+    }
+
+    public void update(double dt, double xForce, double yForce)
+    {
+        double xA = xForce/mass, yA = yForce/mass;
+        xxVel += xA*dt;
+        yyVel += yA*dt;
+        xxPos += xxVel*dt;
+        yyPos += yyVel*dt;
+    }
 };
