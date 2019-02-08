@@ -14,7 +14,7 @@ public class NBody {
         for(int i=0; i<ps.length; ++i)
         {
             ps[i] = new Planet(in.readDouble(),in.readDouble(), in.readDouble(),
-                        in.readDouble(), in.readDouble(), "images/" + in.readString());
+                        in.readDouble(), in.readDouble(), in.readString());
         }
         return ps;
     }
@@ -59,7 +59,7 @@ public class NBody {
             StdDraw.pause(20);   
             t += dt;
         }
-        StdOut.printf("%d\n", planets.length);
+        StdOut.printf("%d\n", ps.length);
         StdOut.printf("%.2e\n", radius);
         for (int i = 0; i < ps.length; i++) {
             StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
