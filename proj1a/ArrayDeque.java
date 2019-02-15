@@ -1,40 +1,66 @@
-public class LinkedListDeque<T>{
+public class ArrayDeque<T>{
 	private int size;
-	private Node sentinel;
-	private static Node {
-		public T item; 
-		public Node next;
-		public Node prev;
-	}
-	private Node()
-	{
-		next = this;
-		prev = this;
-	}
+	private int nextFirst;
+	private int nextLast;
+	private T [] items;
 
-	private Node(T i, Node n, Node p)
+	public ArrayDeque()
 	{
-		item=i;
-		next=n;
-		prev=p;
-	}
-
-	public LinkedListDeque(){
 		size = 0;
-		sentinel = new Node();
+		nextFirst = 0;
+		nextLast = 1;
+		items = (T[]) new Object[8];
+	}
+
+	private int minusOne(int index)
+	{
+		return Math.floorMod(index - 1 + items.length,items.length);
+	}
+
+	private int plusOne(int index)
+	{
+		return Math.floorMod(index + 1 + items.length,items.length);
+	}
+
+	private void copyToNewArray(T[] arr)
+	{
+		for(int index = 0; index <size; ++index)
+		{
+			arr[index] = items[Math.floorMod(nextFirst + index + 1,items.length)];
+		}
+	}
+
+	private void resize()
+	{
+		printFromIndex(size-1, 1);
+		T[] newItems = (T[]) new Object[size*4];
+		copyToNewArray(newItems);
+		items = null; 
+		items = newItems;
+		nextFirst = minusOne(0);
+		nextLast = size;
+		printFromIndex(size-1, 1);
 	}
 
 	public void addFirst(T item)
 	{
-		sentinel.next = new Node(item,sentinel.next,sentinel);
-		sentinel.next.next.prev = sentinel.next;
+		if(size == items.length)
+		{
+			resize();
+		}
+		items[nextFirst] = item;
+		nextFirst = minusOne(nextFirst);
 		++size;
 	}
 
 	public void addLast(T item)
 	{
-		sentinel.prev = new Node(item,sentinel,sentinel.prev)
-		sentinel.prev.prev.next = sentinel.prev;
+		if(size == items.length)
+		{
+			resize();
+		}
+		items[nextLast] = item;
+		nextLast = plusOne(nextLast);
 		++size;
 	}
 
@@ -50,62 +76,63 @@ public class LinkedListDeque<T>{
 
 	public void printDeque()
 	{
-		Node temp = sentinel.next;
-		while(temp!=sentinel)
+		for(int i = 0; i < size; ++i)
 		{
-			System.out.print(temp,item + " ");
-			temp = temp.next;
+			System.out.print(get(i) + " ");
 		}
-
+		System.out.println();
 	}
 
 	public T removeFirst() 
 	{
-		if(size==0)
-			return null;
-		Node r = sentinel.next;
-		sentinel.next = sentinel.next.next;
-		sentinel.next.prev = sentinel;
+		if(size == 0) return null;
+		nextFirst = plusOne(nextFirst);
 		--size;
-		return r.item;
+		T firstItem = items[nextFirst];
+		items[nextFirst] = null;
+		if(items.length > 16 && size < items.length / 4.0)
+		{
+			resize();
+		}
+		return firstItem;
 	}
 
 	public T removeLast()
-	{
-		if(size==0)
-			return null;
-		Node r = sentinel.prev;
-		sentinel.prev=sentinel.prev.prev;
-		sentinel.prev.next=sentinel;
+	{	
+		if(size == 0) return null;
+		nextLast = minusOne(nextLast);
 		--size;
-		return r.item;
+		T lastItem = items[nextLast];
+		items[nextLast] = null;
+		if(items.length > 16 && size < items.length / 4.0)
+		{
+			resize();
+		}
+		return lastItem;
 	}
+
 	public T get(int index)
 	{
-		Node temp=sentinel.next;
-		if (index >= size || size == 0)
-			return null;
-		while(temp!=sentinel)
+		return index >= size ? null : items[Math.floorMod(nextFirst + index + 1,items.length)];
+	}
+
+	private void under(int i)
+	{
+		System.out.println("Next First underlying " + nextFirst);
+		System.out.println("Wanted index " + i );
+		System.out.println("Wanted underlying index " + Math.floorMod(nextFirst + i + 1,items.length));
+		System.out.println("Size " + size );
+		System.out.println("Length " + items.length);
+		System.out.println("Ratio " + items.length/4.0);
+	}
+
+	public void printFromIndex(int index, int size)
+	{
+		for(int i = 0; i < size; ++i)
 		{
-			if(index == 0)
-				return temp.item;
-			--index; 	
-			temp = temp.next;
+			under(index + i);
+			System.out.print(get(index + i) + " ");
 		}
-	}
-
-	private static T getRecursive(Node p, int index)
-	{
-		if(p==sentinel)
-			return null;
-		else if(index==0)
-			return p.item;
-		else
-			return this.getRecursive(p.next, --index);
-	}
-
-	public T getRecursive(int index)
-	{
-		return getRecursive(sentinel.next,index);
+		System.out.println();
 	}
 };
