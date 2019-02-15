@@ -32,14 +32,12 @@ public class ArrayDeque<T>{
 
 	private void resize()
 	{
-		printFromIndex(size-1, 1);
 		T[] newItems = (T[]) new Object[size*4];
 		copyToNewArray(newItems);
 		items = null; 
 		items = newItems;
 		nextFirst = minusOne(0);
 		nextLast = size;
-		printFromIndex(size-1, 1);
 	}
 
 	public void addFirst(T item)
@@ -80,7 +78,6 @@ public class ArrayDeque<T>{
 		{
 			System.out.print(get(i) + " ");
 		}
-		System.out.println();
 	}
 
 	public T removeFirst() 
@@ -116,23 +113,4 @@ public class ArrayDeque<T>{
 		return index >= size ? null : items[Math.floorMod(nextFirst + index + 1,items.length)];
 	}
 
-	private void under(int i)
-	{
-		System.out.println("Next First underlying " + nextFirst);
-		System.out.println("Wanted index " + i );
-		System.out.println("Wanted underlying index " + Math.floorMod(nextFirst + i + 1,items.length));
-		System.out.println("Size " + size );
-		System.out.println("Length " + items.length);
-		System.out.println("Ratio " + items.length/4.0);
-	}
-
-	public void printFromIndex(int index, int size)
-	{
-		for(int i = 0; i < size; ++i)
-		{
-			under(index + i);
-			System.out.print(get(index + i) + " ");
-		}
-		System.out.println();
-	}
 };
