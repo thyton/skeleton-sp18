@@ -1,7 +1,7 @@
 import java.util.concurrent.DelayQueue;
 
 public class Palindrome {
-    private Deque<String> wordToDeque(String word) {
+    public Deque<String> wordToDeque(String word) {
         if (word == null)
             return null;
         Deque<String> deque = new ArrayDeque<String>();
@@ -24,7 +24,7 @@ public class Palindrome {
         return true;
     }
 
-    private Deque<Character> wordToCharDeque(String word) {
+    public Deque<Character> wordToCharDeque(String word) {
         if (word == null)
             return null;
         Deque<Character> deque = new ArrayDeque<Character>();

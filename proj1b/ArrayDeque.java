@@ -113,7 +113,7 @@ public class ArrayDeque<T> implements Deque<T>{
 		{
 			resize();
 		}
-		return lastItem;
+	return lastItem;
 	}
 
 	@Override
