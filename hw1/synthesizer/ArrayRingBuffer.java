@@ -2,6 +2,7 @@
 package synthesizer;
 import javax.naming.AuthenticationNotSupportedException;
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.Iterator;
 //TODO: Make sure to make this class and all of its methods public
 //TODO: Make sure to make this class extend AbstractBoundedQueue<t>
@@ -36,14 +37,14 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
      */
     public void enqueue(T x) {
         // TODO: Enqueue the item. Don't forget to increase fillCount and update last.
-        if ( !isFull() )
-        {
+        if (!isFull()) {
             rb[last] = x;
             last = plusOne(last);
             ++fillCount;
+        } else {
+            throw new RuntimeException("Ring Buffer Overflow");
         }
     }
-
     /**
      * Dequeue oldest item in the ring buffer. If the buffer is empty, then
      * throw new RuntimeException("Ring buffer underflow"). Exceptions
@@ -51,14 +52,14 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
      */
     public T dequeue() {
         // TODO: Dequeue the first item. Don't forget to decrease fillCount and update
-        if ( !isEmpty() )
+        if (!isEmpty())
         {
             --fillCount;
             int oldFirst = first;
             first = plusOne(first);
             return rb[oldFirst];
         }
-        return null;
+            throw new RuntimeException("Ring Buffer Underflow");
     }
 
     /**
@@ -73,4 +74,22 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         return Math.floorMod(num + 1 + rb.length, rb.length);
     }
     // TODO: When you get to part 5, implement the needed code to support iteration.
+    public Iterator<T> iterator() {
+        return new ArrayRingBufferIterator();
+    }
+
+    private class ArrayRingBufferIterator implements Iterator<T> {
+        private int temp;
+        public T next() {
+            int old = temp;
+            temp = plusOne(temp);
+            return rb[old];
+        }
+        public boolean hasNext() {
+            return temp != last;
+        }
+        public ArrayRingBufferIterator() {
+            temp = first;
+        }
+    }
 }
